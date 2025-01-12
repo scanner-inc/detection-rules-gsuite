@@ -1,0 +1,27 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Workspace administrator initiated a data transfer request
+description: |-
+  ## Goal
+  Detect when a Google Workspace administrator initiates a data transfer request.
+
+  ## Strategy
+  Monitor Google Workspace logs to identify when an administrator requests to transfer ownership of a user's data to another user within the same organization. This request typically occurs when a user has left the organization, but it could also be misused by an attacker to exfiltrate data to a compromised account.
+
+  ## Triage and response
+  1. Assess whether there is a legitimate reason for the data transfer request.
+  2. If the request lacks a legitimate reason, investigate the activity of the Google Workspace administrator and the IP address that initiated the request.
+enabled: true
+severity: Low
+query_text: |-
+  %ingest.source_type:gsuite
+  event.name:CREATE_DATA_TRANSFER_REQUEST
+  | groupbycount(actor.email)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- low_severity_alerts
+tags:
+- techniques.t1567.exfiltration_over_web_service
+- source.gsuite
+- tactics.ta0010.exfiltration

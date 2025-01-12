@@ -1,0 +1,35 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Workspace administrator has disabled 2-step verification for organizational
+  unit
+description: |-
+  ## Goal
+  Detect when a Google Workspace administrator disables 2-step verification (2SV) for an organizational unit.
+
+  ## Strategy
+  Monitor Google Workspace logs for instances of administrators disabling 2SV. An attacker with initial access may disable 2SV to weaken security controls.
+
+  ## Triage and response
+  1. Check for other signals and logs related to the impacted user, looking for deviations in the following properties:
+      - Application
+      - Device
+      - Geolocation
+      - IP address
+  2. Reach out to the user to confirm if they recognize the activity.
+  3. If the activity is not legitimate, block the user from signing in and initiate your Incident Response process.
+enabled: true
+severity: Medium
+query_text: |-
+  %ingest.source_type:gsuite
+  id.applicationName:admin
+  event.name:(ALLOW_STRONG_AUTHENTICATION ENFORCE_STRONG_AUTHENTICATION)
+  event.parameters.NEW_VALUE:false
+  | groupbycount(actor.email)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- medium_severity_alerts
+tags:
+- source.gsuite
+- techniques.t1556.modify_authentication_process
+- tactics.ta0003.persistence

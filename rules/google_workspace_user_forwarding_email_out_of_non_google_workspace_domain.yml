@@ -1,0 +1,27 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Workspace user forwarding email out of non Google Workspace domain
+description: |-
+  ## Goal
+  Create a signal when Google Workspace detects a user setting up mail forwarding to a non-Google Workspace domain.
+
+  ## Strategy
+  Monitor Google Workspace logs for email forwarding events to non-Google domains.
+
+  ## Triage and response
+  1. Verify if the forwarding destination email address is legitimate.
+  2. If the address is not legitimate, review all activity for the user and all activity related to the specified IP address.
+enabled: true
+severity: Low
+query_text: |-
+  %ingest.source_type:gsuite
+  event.name:email_forwarding_out_of_domain
+  | groupbycount(actor.email)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- low_severity_alerts
+tags:
+- source.gsuite
+- tactics.ta0009.collection
+- techniques.t1114.email_collection

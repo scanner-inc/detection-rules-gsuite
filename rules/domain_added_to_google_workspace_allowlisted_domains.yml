@@ -1,0 +1,30 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Domain added to Google Workspace allowlisted domains
+description: |-
+  ## Goal
+  Detect when a domain is added to Google Workspace's allowlisted domains.
+
+  ## Strategy
+  This rule monitors Google Workspace logs to identify when a domain is added to the allowlisted domains. An attacker may add a trusted domain to lower security controls for data exfiltration or collection.
+
+  ## Triage and Response
+  1. Contact the user or service account owner to verify if this action is legitimate.
+  2. If legitimate, consider adding the user to a suppression list.
+  3. If not, use the user investigation dashboard to check if the user has taken other actions.
+  4. If the triage results suggest malicious intent, initiate your company's incident response process and investigation.
+enabled: true
+severity: Medium
+query_text: |-
+  %ingest.source_type:gsuite
+  id.applicationName:admin
+  event.name:ADD_TRUSTED_DOMAINS
+  | groupbycount(actor.email)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- medium_severity_alerts
+tags:
+- techniques.t1562.disable_or_modify_tools
+- source.gsuite
+- tactics.ta0005.defense_evasion

@@ -1,0 +1,27 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Workspace admin role created
+description: |-
+  ## Goal
+  Create a signal when Google Workspace detects a new administrative role.
+
+  ## Strategy
+  Monitor Google Workspace logs for `CREATE_ROLE` events.
+
+  ## Triage and Response
+  1. Determine if there is a legitimate reason for the new administrator role.
+  2. If not, investigate the activity from the Google Workspace administrator and the IP that created the role.
+enabled: true
+severity: Low
+query_text: |-
+  %ingest.source_type:gsuite
+  event.name:CREATE_ROLE
+  | groupbycount(actor.email)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- low_severity_alerts
+tags:
+- source.gsuite
+- techniques.t1098.account_manipulation
+- tactics.ta0003.persistence

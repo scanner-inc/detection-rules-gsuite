@@ -1,0 +1,33 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Workspace user disabled 2-step verification
+description: |-
+  ## Goal
+  Detect when a Google Workspace user disables 2-step verification (2SV).
+
+  ## Strategy
+  Monitor Google Workspace logs for instances of users disabling 2SV, as this may indicate a compromised account.
+
+  ## Triage and response
+  1. Review other signals and logs linked to the affected user, looking for deviations in:
+      - Application
+      - Device
+      - Geolocation
+      - IP address
+  2. Contact the user to confirm if they recognize the activity.
+  3. If the activity is unauthorized, block the user from signing in and initiate the Incident Response process.
+enabled: true
+severity: Low
+query_text: |-
+  %ingest.source_type:gsuite
+  id.applicationName:user_accounts
+  event.name:2sv_disable
+  | groupbycount(actor.email)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- low_severity_alerts
+tags:
+- source.gsuite
+- techniques.t1556.modify_authentication_process
+- tactics.ta0003.persistence
