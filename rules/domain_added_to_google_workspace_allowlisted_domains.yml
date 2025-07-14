@@ -15,7 +15,7 @@ description: |-
 enabled: true
 severity: Medium
 query_text: |-
-  %ingest.source_type:gsuite
+  %ingest.source_type:"gsuite:activities"
   id.applicationName:admin
   event.name:ADD_TRUSTED_DOMAINS
   | groupbycount(actor.email)
