@@ -14,7 +14,7 @@ description: |-
 enabled: true
 severity: Medium
 query_text: |-
-  %ingest.source_type:gsuite
+  @scnr.source_type:google_workspace
   id.applicationName:access_transparency
   | count
   | where @q.count > 0
