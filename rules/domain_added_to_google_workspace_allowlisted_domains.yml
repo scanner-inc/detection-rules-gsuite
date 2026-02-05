@@ -12,7 +12,6 @@ description: |-
   2. If legitimate, consider adding the user to a suppression list.
   3. If not, use the user investigation dashboard to check if the user has taken other actions.
   4. If the triage results suggest malicious intent, initiate your company's incident response process and investigation.
-enabled: true
 severity: Medium
 query_text: |-
   @scnr.source_type:google_workspace

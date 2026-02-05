@@ -10,7 +10,6 @@ description: |-
   ## Triage and response
   1. Verify if the forwarding destination email address is legitimate.
   2. If the address is not legitimate, review all activity for the user and all activity related to the specified IP address.
-enabled: true
 severity: Low
 query_text: |-
   @scnr.source_type:google_workspace

@@ -10,7 +10,6 @@ description: |-
   ## Triage and Response
   1. Determine if there is a legitimate reason for the new administrator role.
   2. If not, investigate the activity from the Google Workspace administrator and the IP that created the role.
-enabled: true
 severity: Low
 query_text: |-
   @scnr.source_type:google_workspace

@@ -10,7 +10,6 @@ description: |-
   ## Triage and response
   1. Assess whether there is a legitimate reason for the data transfer request.
   2. If the request lacks a legitimate reason, investigate the activity of the Google Workspace administrator and the IP address that initiated the request.
-enabled: true
 severity: Low
 query_text: |-
   @scnr.source_type:google_workspace

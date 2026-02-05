@@ -16,7 +16,6 @@ description: |-
       - IP address
   2. Reach out to the user to confirm if they recognize the activity.
   3. If the activity is not legitimate, block the user from signing in and initiate your Incident Response process.
-enabled: true
 severity: Medium
 query_text: |-
   @scnr.source_type:google_workspace

@@ -11,7 +11,6 @@ description: |-
   1. Determine the scope of Google's access activity, which can be found in the access event in the Google Workspace event log.
   2. Review which Google Workspace user and resources were accessed by Google.
   3. Investigate the resources being accessed to determine if there is a legitimate reason for Google to review them.
-enabled: true
 severity: Medium
 query_text: |-
   @scnr.source_type:google_workspace
